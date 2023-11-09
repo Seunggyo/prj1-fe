@@ -29,12 +29,19 @@ export function BoardWrite() {
           status: "success",
         }),
       )
-      .catch(() =>
-        toast({
-          description: "저장 중 문제가 발생했습니다.",
-          status: "error",
-        }),
-      )
+      .catch((e) => {
+        if (e.response.status === 400) {
+          toast({
+            description: "작성한 내용을 확인 해주세요.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "저장중 문제가 발생했습니다.",
+            status: "error",
+          });
+        }
+      })
       .finally(() => console.log("끝"));
   }
 
