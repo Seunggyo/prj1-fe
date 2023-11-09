@@ -15,8 +15,10 @@ export function BoardWrite() {
   const [content, setContent] = useState("");
   const [writer, setWriter] = useState("");
   const toast = useToast();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function handleSubmit() {
+    setIsSubmitting(true);
     axios
       .post("/api/board/add", {
         title,
@@ -42,7 +44,9 @@ export function BoardWrite() {
           });
         }
       })
-      .finally(() => console.log("끝"));
+      .finally(() => {
+        setIsSubmitting(false);
+      });
   }
 
   return (
@@ -67,7 +71,11 @@ export function BoardWrite() {
             onChange={(e) => setWriter(e.target.value)}
           ></Input>
         </FormControl>
-        <Button onClick={handleSubmit} colorScheme="twitter">
+        <Button
+          isDisabled={isSubmitting}
+          onClick={handleSubmit}
+          colorScheme="twitter"
+        >
           저장
         </Button>
       </Box>
