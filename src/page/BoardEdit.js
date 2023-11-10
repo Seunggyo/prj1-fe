@@ -38,7 +38,7 @@ export function BoardEdit() {
 
   function handleSubmit() {
     axios
-      .put("api/board/edit", board)
+      .put("/api/board/edit", board)
       .then(() => console.log("잘됨"))
       .catch(() => console.log("잘안됨"))
       .finally(() => console.log("끝"));
@@ -46,9 +46,7 @@ export function BoardEdit() {
 
   return (
     <Box>
-      <h1>
-        {id} 번 글 수정{id} 번 글 수정
-      </h1>
+      <h1>{id} 번 글 수정</h1>
       <FormControl>
         <FormLabel>제목</FormLabel>
         <Input value={board.title} onChange={handleTitleChange} />
