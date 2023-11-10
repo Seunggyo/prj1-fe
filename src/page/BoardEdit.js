@@ -5,6 +5,7 @@ import {
   FormLabel,
   Input,
   Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -14,8 +15,10 @@ import axios from "axios";
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
   const { id } = useParams();
+  const toast = useToast();
 
   const navigate = useNavigate();
+
   useEffect(() => {
     axios.get("/api/board/id/" + id).then((r) => updateBoard(r.data));
   }, []);
@@ -39,9 +42,19 @@ export function BoardEdit() {
   function handleSubmit() {
     axios
       .put("/api/board/edit", board)
-      .then(() => console.log("잘됨"))
-      .catch(() => console.log("잘안됨"))
-      .finally(() => console.log("끝"));
+      .then(() => {
+        toast({
+          description: "수정이 완료되었습니다.",
+          status: "success",
+        });
+        navigate("/");
+      })
+      .catch(() => {
+        toast({
+          description: "문제가 생겼습니다.",
+          status: "error",
+        });
+      });
   }
 
   return (
