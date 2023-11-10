@@ -1,4 +1,12 @@
-import { Box, Button, FormControl, FormLabel, Input } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  FormLabel,
+  Input,
+} from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
 
@@ -7,6 +15,21 @@ export function MemberSignup() {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
+  const [idAvailable, setIdAvailable] = useState(false);
+
+  let submitAvailable = true;
+
+  if (!idAvailable) {
+    submitAvailable = false;
+  }
+
+  if (password != passwordCheck) {
+    submitAvailable = false;
+  }
+
+  if (password.length === 0) {
+    submitAvailable = false;
+  }
 
   function handleSubmit() {
     axios
@@ -20,28 +43,56 @@ export function MemberSignup() {
       .finally(() => console.log("end"));
   }
 
+  function handleIdCheck() {
+    const searchParams = new URLSearchParams();
+    searchParams.set("id", id);
+
+    axios
+      .get("/api/member/check?" + searchParams.toString())
+      .then(() => {
+        setIdAvailable(false);
+      })
+      .catch((e) => {
+        if (e.response.status === 404) {
+          setIdAvailable(true);
+        }
+      });
+  }
+
   return (
     <Box>
       <h1>회원 가입</h1>
-      <FormControl>
+      <FormControl isInvalid={!idAvailable}>
         <FormLabel>id</FormLabel>
-        <Input value={id} onChange={(e) => setId(e.target.value)} />
+        <Flex>
+          <Input
+            value={id}
+            onChange={(e) => {
+              setId(e.target.value);
+              setIdAvailable(false);
+            }}
+          />
+          <Button onClick={handleIdCheck}>중복확인</Button>
+        </Flex>
+        <FormErrorMessage>아이디 중복체크를 해주세요</FormErrorMessage>
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={password.length === 0}>
         <FormLabel>password</FormLabel>
         <Input
           type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
+        <FormErrorMessage>암호를 입력해주세요</FormErrorMessage>요
       </FormControl>
-      <FormControl>
+      <FormControl isInvalid={password != passwordCheck}>
         <FormLabel>password 확인</FormLabel>
         <Input
           type="password"
           value={passwordCheck}
           onChange={(e) => setPasswordCheck(e.target.value)}
         />
+        <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
       </FormControl>
       <FormControl>
         <FormLabel>email</FormLabel>
@@ -51,7 +102,11 @@ export function MemberSignup() {
           onChange={(e) => setEmail(e.target.value)}
         />
       </FormControl>
-      <Button onClick={handleSubmit} colorScheme="twitter">
+      <Button
+        isDisabled={!submitAvailable}
+        onClick={handleSubmit}
+        colorScheme="twitter"
+      >
         가입
       </Button>
     </Box>
