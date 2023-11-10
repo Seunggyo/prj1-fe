@@ -54,13 +54,19 @@ export function MemberSignup() {
         });
         navigate("/");
       })
-      .catch(() =>
-        toast({
-          description: "가입에 실패하였습니다.",
-          status: "error",
-        }),
-      )
-      .finally(() => console.log("end"));
+      .catch((e) => {
+        if (e.response.status == 400) {
+          toast({
+            description: "가입에 실패하였습니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "가입 중 오류가 발생하였습니다.",
+            status: "error",
+          });
+        }
+      });
   }
 
   function handleIdCheck() {
