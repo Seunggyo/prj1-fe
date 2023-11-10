@@ -33,7 +33,7 @@ export function MemberList() {
         </Thead>
         <Tbody>
           {list.map((member) => (
-            <Tr>
+            <Tr key={member.id}>
               <Td>{member.id}</Td>
               <Td>{member.password}</Td>
               <Td>{member.email}</Td>

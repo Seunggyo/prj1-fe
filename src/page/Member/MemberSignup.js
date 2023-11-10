@@ -32,7 +32,7 @@ export function MemberSignup() {
     submitAvailable = false;
   }
 
-  if (password != passwordCheck) {
+  if (password !== passwordCheck) {
     submitAvailable = false;
   }
 
@@ -55,7 +55,7 @@ export function MemberSignup() {
         navigate("/");
       })
       .catch((e) => {
-        if (e.response.status == 400) {
+        if (e.response.status === 400) {
           toast({
             description: "가입에 실패하였습니다.",
             status: "error",
@@ -142,7 +142,7 @@ export function MemberSignup() {
         />
         <FormErrorMessage>암호를 입력해주세요</FormErrorMessage>요
       </FormControl>
-      <FormControl isInvalid={password != passwordCheck}>
+      <FormControl isInvalid={password !== passwordCheck}>
         <FormLabel>password 확인</FormLabel>
         <Input
           type="password"
