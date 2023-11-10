@@ -6,9 +6,11 @@ import {
   FormErrorMessage,
   FormLabel,
   Input,
+  useToast,
 } from "@chakra-ui/react";
 import { useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export function MemberSignup() {
   const [id, setId] = useState("");
@@ -16,6 +18,9 @@ export function MemberSignup() {
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
   const [idAvailable, setIdAvailable] = useState(false);
+
+  const navigate = useNavigate();
+  const toast = useToast();
 
   let submitAvailable = true;
 
@@ -38,8 +43,19 @@ export function MemberSignup() {
         password,
         email,
       })
-      .then(() => console.log("good"))
-      .catch(() => console.log("bad"))
+      .then(() => {
+        toast({
+          description: "가입이 완료 되었습니다.",
+          status: "success",
+        });
+        navigate("/");
+      })
+      .catch(() =>
+        toast({
+          description: "가입에 실패하였습니다.",
+          status: "error",
+        }),
+      )
       .finally(() => console.log("end"));
   }
 
@@ -51,10 +67,18 @@ export function MemberSignup() {
       .get("/api/member/check?" + searchParams.toString())
       .then(() => {
         setIdAvailable(false);
+        toast({
+          description: "이미 사용 중인 ID입니다.",
+          status: "warning",
+        });
       })
       .catch((e) => {
         if (e.response.status === 404) {
           setIdAvailable(true);
+          toast({
+            description: "사용 가능한 ID 입니다.",
+            status: "success",
+          });
         }
       });
   }
