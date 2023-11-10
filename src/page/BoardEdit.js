@@ -47,13 +47,20 @@ export function BoardEdit() {
           description: "수정이 완료되었습니다.",
           status: "success",
         });
-        navigate("/");
+        navigate("/board/" + id);
       })
-      .catch(() => {
-        toast({
-          description: "문제가 생겼습니다.",
-          status: "error",
-        });
+      .catch((e) => {
+        if (e.response.status === 400) {
+          toast({
+            description: "요청이 잘못되었습니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "수정중 문제가 생겼습니다.",
+            status: "error",
+          });
+        }
       });
   }
 
