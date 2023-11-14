@@ -33,7 +33,7 @@ export function BoardList() {
               <Th>id</Th>
               <Th>title</Th>
               <Th>by</Th>
-              <Th>nickName</Th>
+              <Th>nickname</Th>
               <Th>at</Th>
             </Tr>
           </Thead>

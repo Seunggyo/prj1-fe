@@ -67,7 +67,7 @@ export function BoardView() {
       </FormControl>
       <FormControl>
         <FormLabel>작성자</FormLabel>
-        <Input readOnly value={board.writer} />
+        <Input readOnly value={board.nickName} />
       </FormControl>
       <FormControl>
         <FormLabel>작성일시</FormLabel>

@@ -6,15 +6,17 @@ import {
   Input,
   useToast,
 } from "@chakra-ui/react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { LoginContext } from "../../App";
 
 export function MemberLogin() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const toast = useToast();
   const navigate = useNavigate();
+  const { fetchLogin } = useContext(LoginContext);
 
   function handleLogin() {
     // TODO : 로그인 후 성공 , 실패, 완료 코드 추가
@@ -33,7 +35,9 @@ export function MemberLogin() {
           status: "error",
         });
       })
-      .finally(() => console.log("done"));
+      .finally(() => {
+        fetchLogin();
+      });
   }
 
   return (
