@@ -46,6 +46,17 @@ function App() {
     return login !== "";
   }
 
+  function isAdmin() {
+    if (login.auth) {
+      return login.auth.some((elem) => elem.name === "admin");
+    }
+    return false;
+  }
+
+  // function isManager() {
+  //   return login.auth.some((e) => e.name === "manager");
+  // }
+
   function hasAccess(userId) {
     return login.id === userId;
   }
@@ -53,10 +64,10 @@ function App() {
   useEffect(() => {
     fetchLogin();
   }, []);
-
+  console.log(login);
   return (
     <LoginContext.Provider
-      value={{ login, fetchLogin, isAuthenticated, hasAccess }}
+      value={{ login, fetchLogin, isAuthenticated, hasAccess, isAdmin }}
     >
       <RouterProvider router={routes} />
     </LoginContext.Provider>
