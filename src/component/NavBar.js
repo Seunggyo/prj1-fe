@@ -26,11 +26,19 @@ export function NavBar() {
   return (
     <Flex>
       <Button onClick={() => navigate("/")}>home</Button>
-      <Button onClick={() => navigate("/write")}>write</Button>
-      <Button onClick={() => navigate("/signup")}>signup</Button>
-      <Button onClick={() => navigate("/member/list")}>member list</Button>
-      <Button onClick={() => navigate("/login")}>login</Button>
-      <Button onClick={hadleLogout}>log out</Button>
+      {isAuthenticated() && (
+        <Button onClick={() => navigate("/write")}>write</Button>
+      )}
+      {isAuthenticated() || (
+        <Button onClick={() => navigate("/signup")}>signup</Button>
+      )}
+      {isAuthenticated() && (
+        <Button onClick={() => navigate("/member/list")}>member list</Button>
+      )}
+      {isAuthenticated() || (
+        <Button onClick={() => navigate("/login")}>login</Button>
+      )}
+      {isAuthenticated() && <Button onClick={hadleLogout}>log out</Button>}
     </Flex>
   );
 }

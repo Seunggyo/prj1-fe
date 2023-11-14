@@ -49,7 +49,7 @@ function App() {
   useEffect(() => {
     fetchLogin();
   }, []);
-  console.log(login);
+
   return (
     <LoginContext.Provider value={{ login, fetchLogin, isAuthenticated }}>
       <RouterProvider router={routes} />
