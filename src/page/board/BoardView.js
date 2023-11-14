@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -18,6 +18,7 @@ import {
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
+import { LoginContext } from "../../App";
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
@@ -27,6 +28,9 @@ export function BoardView() {
   const navigate = useNavigate();
 
   const { id } = useParams();
+
+  const { hasAccess } = useContext(LoginContext);
+
   useEffect(() => {
     axios.get("/api/board/id/" + id).then((r) => setBoard(r.data));
   }, []);
@@ -73,12 +77,16 @@ export function BoardView() {
         <FormLabel>작성일시</FormLabel>
         <Input readOnly value={board.inserted} />
       </FormControl>
-      <Button colorScheme="green" onClick={() => navigate("/edit/" + id)}>
-        수정
-      </Button>
-      <Button colorScheme="red" onClick={onOpen}>
-        삭제
-      </Button>
+      {hasAccess(board.writer) && (
+        <Box>
+          <Button colorScheme="green" onClick={() => navigate("/edit/" + id)}>
+            수정
+          </Button>
+          <Button colorScheme="red" onClick={onOpen}>
+            삭제
+          </Button>
+        </Box>
+      )}
 
       {/*  삭제 모달*/}
       <Modal isOpen={isOpen} onClose={onClose}>
