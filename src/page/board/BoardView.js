@@ -46,10 +46,22 @@ export function BoardView() {
       })
 
       .catch((e) => {
-        toast({
-          description: "삭제에 문제가 발생했습니다.",
-          status: "error",
-        });
+        if (e.response.status === 401) {
+          toast({
+            description: "로그인이 필요합니다.",
+            status: "error",
+          });
+        } else if (e.response.status === 403) {
+          toast({
+            description: "다른사람의 게시물을 지울수 없습니다.",
+            status: "error",
+          });
+        } else {
+          toast({
+            description: "삭제 중 문제가 발생하였습니다.",
+            status: "warning",
+          });
+        }
       })
       .finally(() => onClose());
   }
