@@ -13,13 +13,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export function MemberList() {
+  const [list, setList] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get("/api/member/list").then((r) => setList(r.data));
+    axios.get("/api/member/list").then((response) => setList(response.data));
   }, []);
 
-  const [list, setList] = useState(null);
   if (list === null) {
     return <Spinner />;
   }
@@ -37,9 +38,10 @@ export function MemberList() {
         <Thead>
           <Tr>
             <Th>id</Th>
-            <Th>password</Th>
+            <Th>pw</Th>
+            <Th>별명</Th>
             <Th>email</Th>
-            <Th>가입 일시</Th>
+            <Th>가입일시</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -51,6 +53,7 @@ export function MemberList() {
             >
               <Td>{member.id}</Td>
               <Td>{member.password}</Td>
+              <Td>{member.nickName}</Td>
               <Td>{member.email}</Td>
               <Td>{member.inserted}</Td>
             </Tr>

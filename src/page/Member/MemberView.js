@@ -4,6 +4,13 @@ import {
   FormControl,
   FormLabel,
   Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   Spinner,
   useDisclosure,
   useToast,
@@ -74,11 +81,39 @@ export function MemberView() {
         <Input type="text" value={member.password} readOnly />
       </FormControl>
       <FormControl>
+        <FormLabel>별명</FormLabel>
+        <Input value={member.nickName}></Input>
+      </FormControl>
+      <FormControl>
         <FormLabel>email</FormLabel>
         <Input value={member.email} readOnly />
       </FormControl>
-      <Button colorScheme="purple">수정</Button>
-      <Button colorScheme="red">삭제</Button>
+      <Button
+        colorScheme="purple"
+        onClick={() => navigate("/member/edit?" + params.toString())}
+      >
+        수정
+      </Button>
+      <Button colorScheme="red" onClick={onOpen}>
+        탈퇴
+      </Button>
+
+      {/* 탈퇴 모달 */}
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>탈퇴 확인</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>탈퇴 하시겠습니까?</ModalBody>
+
+          <ModalFooter>
+            <Button onClick={onClose}>닫기</Button>
+            <Button onClick={handleDelete} colorScheme="red">
+              탈퇴
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 }

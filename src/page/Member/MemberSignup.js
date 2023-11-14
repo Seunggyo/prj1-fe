@@ -17,13 +17,18 @@ export function MemberSignup() {
   const [password, setPassword] = useState("");
   const [passwordCheck, setPasswordCheck] = useState("");
   const [email, setEmail] = useState("");
+
   const [idAvailable, setIdAvailable] = useState(false);
   const [emailAvailable, setEmailAvailable] = useState(false);
 
-  const navigate = useNavigate();
+  const [nickName, setNickName] = useState("");
+  const [nickNameAvailable, setNickNameAvailable] = useState(false);
+
   const toast = useToast();
+  const navigate = useNavigate();
 
   let submitAvailable = true;
+
   if (!emailAvailable) {
     submitAvailable = false;
   }
@@ -40,29 +45,37 @@ export function MemberSignup() {
     submitAvailable = false;
   }
 
+  if (!nickNameAvailable) {
+    submitAvailable = false;
+  }
+
   function handleSubmit() {
     axios
       .post("/api/member/signup", {
         id,
         password,
         email,
+        nickName,
       })
       .then(() => {
+        // toast
+        // navigate
         toast({
-          description: "가입이 완료 되었습니다.",
+          description: "회원가입이 완료되었습니다.",
           status: "success",
         });
         navigate("/");
       })
-      .catch((e) => {
-        if (e.response.status === 400) {
+      .catch((error) => {
+        // toast
+        if (error.response.status === 400) {
           toast({
-            description: "가입에 실패하였습니다.",
+            description: "입력값을 확인해주세요.",
             status: "error",
           });
         } else {
           toast({
-            description: "가입 중 오류가 발생하였습니다.",
+            description: "가입 중에 오류가 발생하였습니다.",
             status: "error",
           });
         }
@@ -70,11 +83,11 @@ export function MemberSignup() {
   }
 
   function handleIdCheck() {
-    const searchParams = new URLSearchParams();
-    searchParams.set("id", id);
+    const searchParam = new URLSearchParams();
+    searchParam.set("id", id);
 
     axios
-      .get("/api/member/check?" + searchParams.toString())
+      .get("/api/member/check?" + searchParam.toString())
       .then(() => {
         setIdAvailable(false);
         toast({
@@ -82,11 +95,11 @@ export function MemberSignup() {
           status: "warning",
         });
       })
-      .catch((e) => {
-        if (e.response.status === 404) {
+      .catch((error) => {
+        if (error.response.status === 404) {
           setIdAvailable(true);
           toast({
-            description: "사용 가능한 ID 입니다.",
+            description: "사용 가능한 ID입니다.",
             status: "success",
           });
         }
@@ -96,20 +109,45 @@ export function MemberSignup() {
   function handleEmailCheck() {
     const params = new URLSearchParams();
     params.set("email", email);
+
     axios
-      .get("/api/member/check?" + params.toString())
+      .get("/api/member/check?" + params)
       .then(() => {
         setEmailAvailable(false);
         toast({
-          description: "이미 사용중인 email 입니다.",
+          description: "이미 사용 중인 email입니다.",
           status: "warning",
         });
       })
-      .catch((e) => {
-        if (e.response.status === 404) {
+      .catch((error) => {
+        if (error.response.status === 404) {
           setEmailAvailable(true);
           toast({
-            description: "사용가능한 email 입니다.",
+            description: "사용 가능한 email입니다.",
+            status: "success",
+          });
+        }
+      });
+  }
+
+  function handleNickNameCheck() {
+    const params = new URLSearchParams();
+    params.set("nickName", nickName);
+
+    axios
+      .get("/api/member/check?" + params)
+      .then(() => {
+        setNickNameAvailable(false);
+        toast({
+          description: "이미 사용 중인 별명입니다.",
+          status: "warning",
+        });
+      })
+      .catch((error) => {
+        if (error.response.status === 404) {
+          setNickNameAvailable(true);
+          toast({
+            description: "사용 가능한 별명입니다.",
             status: "success",
           });
         }
@@ -131,7 +169,7 @@ export function MemberSignup() {
           />
           <Button onClick={handleIdCheck}>중복확인</Button>
         </Flex>
-        <FormErrorMessage>아이디 중복체크를 해주세요</FormErrorMessage>
+        <FormErrorMessage>ID 중복체크를 해주세요.</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={password.length === 0}>
         <FormLabel>password</FormLabel>
@@ -140,7 +178,8 @@ export function MemberSignup() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <FormErrorMessage>암호를 입력해주세요</FormErrorMessage>요
+
+        <FormErrorMessage>암호를 입력해 주세요.</FormErrorMessage>
       </FormControl>
       <FormControl isInvalid={password !== passwordCheck}>
         <FormLabel>password 확인</FormLabel>
@@ -151,6 +190,23 @@ export function MemberSignup() {
         />
         <FormErrorMessage>암호가 다릅니다.</FormErrorMessage>
       </FormControl>
+
+      <FormControl isInvalid={!nickNameAvailable}>
+        <FormLabel>nick name</FormLabel>
+        <Flex>
+          <Input
+            type="text"
+            value={nickName}
+            onChange={(e) => {
+              setNickName(e.target.value);
+              setNickNameAvailable(false);
+            }}
+          ></Input>
+          <Button onClick={handleNickNameCheck}>중복확인</Button>
+        </Flex>
+        <FormErrorMessage>nickName 중복 체크를 해주세요.</FormErrorMessage>
+      </FormControl>
+
       <FormControl isInvalid={!emailAvailable}>
         <FormLabel>email</FormLabel>
         <Flex>
@@ -164,12 +220,12 @@ export function MemberSignup() {
           />
           <Button onClick={handleEmailCheck}>중복체크</Button>
         </Flex>
-        <FormErrorMessage>이메일 중복 체크를 해주세요</FormErrorMessage>
+        <FormErrorMessage>email 중복 체크를 해주세요.</FormErrorMessage>
       </FormControl>
       <Button
         isDisabled={!submitAvailable}
         onClick={handleSubmit}
-        colorScheme="twitter"
+        colorScheme="blue"
       >
         가입
       </Button>
