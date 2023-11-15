@@ -1,4 +1,16 @@
-import { Box, Button, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  Flex,
+  Heading,
+  Stack,
+  StackDivider,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -21,7 +33,7 @@ function CommentForm({ boardId }) {
 }
 
 function CommentList({ boardId }) {
-  const [commentList, setCommentList] = useState(null);
+  const [commentList, setCommentList] = useState([]);
 
   const params = new URLSearchParams();
 
@@ -32,7 +44,28 @@ function CommentList({ boardId }) {
       .get("/api/comment/list?" + params)
       .then((r) => setCommentList(r.data));
   }, []);
-  return <Box>댓글 리스트</Box>;
+  return (
+    <Card>
+      <CardHeader>
+        <Heading size="md">댓글 리스트</Heading>
+      </CardHeader>
+      <CardBody>
+        <Stack divider={<StackDivider />} spacing="4">
+          {commentList.map((c) => (
+            <Box>
+              <Flex justifyContent="space-between">
+                <Heading size="xs">{c.memberId}</Heading>
+                <Text fontSize="xs">{c.inserted}</Text>
+              </Flex>
+              <Text pt="2" fontSize="sm">
+                {c.comment}
+              </Text>
+            </Box>
+          ))}
+        </Stack>
+      </CardBody>
+    </Card>
+  );
 }
 
 export function CommentContainer({ boardId }) {
