@@ -19,6 +19,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { LoginContext } from "../../component/LoginProvider";
+import { CommentContainer } from "../../component/CommentContainer";
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
@@ -105,6 +106,8 @@ export function BoardView() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <CommentContainer boardId={id} />
     </Box>
   );
 }
