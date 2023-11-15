@@ -32,12 +32,7 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentList({ commentList }) {
-  function handleDelete(id) {
-    // Todo: then, catch, finally
-    axios.delete("/api/comment/" + id);
-  }
-
+function CommentList({ commentList, onDelete, isSubmitting }) {
   return (
     <Card>
       <CardHeader>
@@ -56,7 +51,8 @@ function CommentList({ commentList }) {
                   {c.comment}
                 </Text>
                 <Button
-                  onClick={() => handleDelete(c.id)}
+                  isDisabled={isSubmitting}
+                  onClick={() => onDelete(c.id)}
                   size="xs"
                   colorScheme="red"
                 >
@@ -81,6 +77,12 @@ export function CommentContainer({ boardId }) {
       .finally(() => setIsSubmitting(false));
   }
 
+  function handleDelete(id) {
+    // Todo: then, catch, finally
+    setIsSubmitting(true);
+    axios.delete("/api/comment/" + id).finally(() => setIsSubmitting(false));
+  }
+
   const [commentList, setCommentList] = useState([]);
 
   useEffect(() => {
@@ -100,7 +102,12 @@ export function CommentContainer({ boardId }) {
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
       />
-      <CommentList boardId={boardId} commentList={commentList} />
+      <CommentList
+        boardId={boardId}
+        isSubmitting={isSubmitting}
+        commentList={commentList}
+        onDelete={handleDelete}
+      />
     </Box>
   );
 }
