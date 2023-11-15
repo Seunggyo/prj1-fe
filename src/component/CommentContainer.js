@@ -20,8 +20,9 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { LoginContext } from "./LoginProvider";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
   const [comment, setComment] = useState("");
@@ -41,6 +42,8 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
 }
 
 function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
+  const { hasAccess } = useContext(LoginContext);
+
   return (
     <Card>
       <CardHeader>
@@ -58,14 +61,16 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
                 <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
                   {c.comment}
                 </Text>
-                <Button
-                  isDisabled={isSubmitting}
-                  onClick={() => onDeleteModalOpen(c.id)}
-                  size="xs"
-                  colorScheme="red"
-                >
-                  <DeleteIcon />
-                </Button>
+                {hasAccess(c.memberId) && (
+                  <Button
+                    isDisabled={isSubmitting}
+                    onClick={() => onDeleteModalOpen(c.id)}
+                    size="xs"
+                    colorScheme="red"
+                  >
+                    <DeleteIcon />
+                  </Button>
+                )}
               </Flex>
             </Box>
           ))}
@@ -77,10 +82,14 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
 
 export function CommentContainer({ boardId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [id, setId] = useState(0);
+  // useRef : 컴포넌트에서 임시로 값을 저장하는 용도로 사용
+  const commentIdRef = useRef(0);
 
   const { isOpen, onClose, onOpen } = useDisclosure();
+
+  const { isAuthenticated } = useContext(LoginContext);
+
+  // const [id, setId] = useState(0);
 
   function handleSubmit(comment) {
     setIsSubmitting(true);
@@ -92,7 +101,7 @@ export function CommentContainer({ boardId }) {
   function handleDelete() {
     // Todo: then, catch, finally
     setIsSubmitting(true);
-    axios.delete("/api/comment/" + id).finally(() => {
+    axios.delete("/api/comment/" + commentIdRef.current).finally(() => {
       setIsSubmitting(false);
       onClose();
     });
@@ -111,18 +120,21 @@ export function CommentContainer({ boardId }) {
   }, [isSubmitting]);
 
   function handleDeleteModalOpen(id) {
-    setId(id);
+    // setId(id);
+    commentIdRef.current = id;
 
     onOpen();
   }
 
   return (
     <Box>
-      <CommentForm
-        boardId={boardId}
-        isSubmitting={isSubmitting}
-        onSubmit={handleSubmit}
-      />
+      {isAuthenticated() && (
+        <CommentForm
+          boardId={boardId}
+          isSubmitting={isSubmitting}
+          onSubmit={handleSubmit}
+        />
+      )}
       <CommentList
         boardId={boardId}
         isSubmitting={isSubmitting}
