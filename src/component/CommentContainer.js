@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { DeleteIcon } from "@chakra-ui/icons";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { LoginContext } from "./LoginProvider";
 
 function CommentForm({ boardId, isSubmitting, onSubmit }) {
@@ -63,14 +63,19 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
                   {c.comment}
                 </Text>
                 {hasAccess(c.memberId) && (
-                  <Button
-                    isDisabled={isSubmitting}
-                    onClick={() => onDeleteModalOpen(c.id)}
-                    size="xs"
-                    colorScheme="red"
-                  >
-                    <DeleteIcon />
-                  </Button>
+                  <Box>
+                    <Button
+                      isDisabled={isSubmitting}
+                      onClick={() => onDeleteModalOpen(c.id)}
+                      size="xs"
+                      colorScheme="red"
+                    >
+                      <DeleteIcon />
+                    </Button>
+                    <Button colorScheme="green" size="xs">
+                      <EditIcon />
+                    </Button>
+                  </Box>
                 )}
               </Flex>
             </Box>
