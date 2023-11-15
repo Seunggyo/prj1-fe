@@ -10,6 +10,12 @@ export function NavBar() {
   const toast = useToast();
   const navigate = useNavigate();
 
+  const urlParams = new URLSearchParams();
+
+  if (login !== "") {
+    urlParams.set("id", login.id);
+  }
+
   function hadleLogout() {
     //Todo : 로그아웃 후 할일 추가
     axios
@@ -35,6 +41,11 @@ export function NavBar() {
       )}
       {isAdmin() && (
         <Button onClick={() => navigate("/member/list")}>member list</Button>
+      )}
+      {isAuthenticated() && (
+        <Button onClick={() => navigate("/member?" + urlParams.toString())}>
+          my page
+        </Button>
       )}
       {isAuthenticated() || (
         <Button onClick={() => navigate("/login")}>login</Button>
