@@ -13,9 +13,12 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function CommentForm({ boardId }) {
   const [comment, setComment] = useState("");
+
+  const navigate = useNavigate();
 
   function handleSubmit() {
     axios.post("/api/comment/add", {
@@ -51,13 +54,14 @@ function CommentList({ boardId }) {
       </CardHeader>
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
+          {/*todo: 댓글 작성 후 re render*/}
           {commentList.map((c) => (
             <Box>
               <Flex justifyContent="space-between">
                 <Heading size="xs">{c.memberId}</Heading>
                 <Text fontSize="xs">{c.inserted}</Text>
               </Flex>
-              <Text pt="2" fontSize="sm">
+              <Text sx={{ whiteSpace: "pre-wrap" }} pt="2" fontSize="sm">
                 {c.comment}
               </Text>
             </Box>
