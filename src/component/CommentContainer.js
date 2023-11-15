@@ -31,19 +31,7 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentList({ boardId }) {
-  const [commentList, setCommentList] = useState([]);
-
-  const params = new URLSearchParams();
-
-  params.set("id", boardId);
-
-  useEffect(() => {
-    axios
-      .get("/api/comment/list?" + params)
-      .then((r) => setCommentList(r.data));
-  }, []);
-
+function CommentList({ commentList }) {
   return (
     <Card>
       <CardHeader>
@@ -51,7 +39,6 @@ function CommentList({ boardId }) {
       </CardHeader>
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
-          {/*todo: 댓글 작성 후 re render*/}
           {commentList.map((c) => (
             <Box>
               <Flex justifyContent="space-between">
@@ -79,6 +66,18 @@ export function CommentContainer({ boardId }) {
       .finally(() => setIsSubmitting(false));
   }
 
+  const [commentList, setCommentList] = useState([]);
+
+  useEffect(() => {
+    if (!isSubmitting) {
+      const params = new URLSearchParams();
+      params.set("id", boardId);
+      axios
+        .get("/api/comment/list?" + params)
+        .then((r) => setCommentList(r.data));
+    }
+  }, [isSubmitting]);
+
   return (
     <Box>
       <CommentForm
@@ -86,7 +85,7 @@ export function CommentContainer({ boardId }) {
         isSubmitting={isSubmitting}
         onSubmit={handleSubmit}
       />
-      <CommentList boardId={boardId} />
+      <CommentList boardId={boardId} commentList={commentList} />
     </Box>
   );
 }
