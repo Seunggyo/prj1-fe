@@ -40,7 +40,7 @@ function CommentList({ commentList }) {
       <CardBody>
         <Stack divider={<StackDivider />} spacing="4">
           {commentList.map((c) => (
-            <Box>
+            <Box key={c.id}>
               <Flex justifyContent="space-between">
                 <Heading size="xs">{c.memberId}</Heading>
                 <Text fontSize="xs">{c.inserted}</Text>
