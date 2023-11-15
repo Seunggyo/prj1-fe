@@ -18,6 +18,7 @@ import {
   Text,
   Textarea,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
@@ -89,22 +90,57 @@ export function CommentContainer({ boardId }) {
 
   const { isAuthenticated } = useContext(LoginContext);
 
+  const toast = useToast();
+
   // const [id, setId] = useState(0);
 
   function handleSubmit(comment) {
     setIsSubmitting(true);
     axios
       .post("/api/comment/add", comment)
+      .then(() => {
+        toast({
+          description: "댓글이 등록 되었습니다.",
+          status: "success",
+        });
+      })
+      .catch(() => {
+        toast({
+          description: "댓글 등록 중 문제가 발생하였습니다.",
+          status: "error",
+        });
+      })
       .finally(() => setIsSubmitting(false));
   }
 
   function handleDelete() {
     // Todo: then, catch, finally
     setIsSubmitting(true);
-    axios.delete("/api/comment/" + commentIdRef.current).finally(() => {
-      setIsSubmitting(false);
-      onClose();
-    });
+    axios
+      .delete("/api/comment/" + commentIdRef.current)
+      .then(() => {
+        toast({
+          description: "댓글이 삭제 되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((e) => {
+        if (e.response.status === 401 || e.response.status === 403) {
+          toast({
+            description: "권한이 없습니다.",
+            status: "warning",
+          });
+        } else {
+          toast({
+            description: "댓글 삭제 중 문제가 생겼습니다.",
+            status: "error",
+          });
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        onClose();
+      });
   }
 
   const [commentList, setCommentList] = useState([]);
