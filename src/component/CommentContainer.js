@@ -1,4 +1,14 @@
-import { Box, Button, Textarea } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Table,
+  Tbody,
+  Td,
+  Textarea,
+  Th,
+  Thead,
+  Tr,
+} from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
 
@@ -32,7 +42,29 @@ function CommentList({ boardId }) {
       .get("/api/comment/list?" + params)
       .then((r) => setCommentList(r.data));
   }, []);
-  return <Box>댓글 리스트</Box>;
+  return (
+    <Box>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>댓글 작성자</Th>
+            <Th>내용</Th>
+            <Th>올린시간</Th>
+          </Tr>
+        </Thead>
+        <Tbody>
+          {commentList &&
+            commentList.map((c) => (
+              <Tr key={c.id}>
+                <Td>{c.memberId}</Td>
+                <Td>{c.comment}</Td>
+                <Td>{c.inserted}</Td>
+              </Tr>
+            ))}
+        </Tbody>
+      </Table>
+    </Box>
+  );
 }
 
 export function CommentContainer({ boardId }) {
