@@ -1,4 +1,5 @@
 import {
+  Badge,
   Box,
   Spinner,
   Table,
@@ -11,6 +12,7 @@ import {
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ChatIcon } from "@chakra-ui/icons";
 
 export function BoardList() {
   const [boardList, setBoardList] = useState(null);
@@ -48,7 +50,15 @@ export function BoardList() {
                   onClick={() => navigate("/board/" + board.id)}
                 >
                   <Td>{board.id}</Td>
-                  <Td>{board.title}</Td>
+                  <Td>
+                    {board.title}
+                    {board.countComment > 0 && (
+                      <Badge>
+                        <ChatIcon />
+                        {board.countComment}
+                      </Badge>
+                    )}
+                  </Td>
                   <Td>{board.writer}</Td>
                   <Td>{board.nickName}</Td>
                   <Td>{board.inserted}</Td>
