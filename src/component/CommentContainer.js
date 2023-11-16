@@ -42,20 +42,48 @@ function CommentForm({ boardId, isSubmitting, onSubmit }) {
   );
 }
 
-function CommentItem({ c, onDeleteModalOpen, isSubmitting }) {
+function CommentItem({ c, onDeleteModalOpen, isSubmitting, setIsSubmitting }) {
   const [isEditing, setIsEditing] = useState(false);
   const { hasAccess } = useContext(LoginContext);
   const [commentEdited, setCommentEdited] = useState(c.comment);
+  const toast = useToast();
 
   function handleSubmit() {
+    // todo : textarea 닫기
+    // todo : 응답 코드에 따른 기능들 추가
+
+    setIsSubmitting(true);
+
     axios
       .put("/api/comment/edit", {
         id: c.id,
         comment: commentEdited,
       })
-      .then(() => console.log("good"))
-      .catch(() => console.log("bad"))
-      .finally(() => console.log("done"));
+      .then(() => {
+        toast({
+          description: "댓글이 수정 되었습니다.",
+          status: "success",
+        });
+      })
+      .catch((e) => {
+        if (e.response.status === 401 || e.response.status === 403) {
+          toast({
+            description: "권한이 없습니다.",
+            status: "warning",
+          });
+        }
+
+        if (e.response.status === 400) {
+          toast({
+            description: "댓글을 공백으로 둘수 없습니다.",
+            status: "error",
+          });
+        }
+      })
+      .finally(() => {
+        setIsSubmitting(false);
+        setIsEditing(false);
+      });
   }
 
   return (
@@ -75,7 +103,11 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting }) {
                 value={commentEdited}
                 onChange={(e) => setCommentEdited(e.target.value)}
               />
-              <Button colorScheme="blue" onClick={handleSubmit}>
+              <Button
+                isDisabled={isSubmitting}
+                colorScheme="blue"
+                onClick={handleSubmit}
+              >
                 저장
               </Button>
             </Box>
@@ -102,7 +134,7 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting }) {
               </Button>
             )}
             <Button
-              isSubmitting={isSubmitting}
+              isDisabled={isSubmitting}
               onClick={() => onDeleteModalOpen(c.id)}
               size="xs"
               colorScheme="red"
@@ -116,7 +148,12 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting }) {
   );
 }
 
-function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
+function CommentList({
+  commentList,
+  onDeleteModalOpen,
+  isSubmitting,
+  setIsSubmitting,
+}) {
   const { hasAccess } = useContext(LoginContext);
 
   return (
@@ -132,6 +169,7 @@ function CommentList({ commentList, onDeleteModalOpen, isSubmitting }) {
               c={c}
               onDeleteModalOpen={onDeleteModalOpen}
               isSubmitting={isSubmitting}
+              setIsSubmitting={setIsSubmitting}
             />
           ))}
         </Stack>
@@ -233,6 +271,7 @@ export function CommentContainer({ boardId }) {
       <CommentList
         boardId={boardId}
         isSubmitting={isSubmitting}
+        setIsSubmitting={setIsSubmitting}
         commentList={commentList}
         onDeleteModalOpen={handleDeleteModalOpen}
       />
