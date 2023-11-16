@@ -89,7 +89,7 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting, setIsSubmitting }) {
   return (
     <Box>
       <Flex justifyContent="space-between">
-        <Heading size="xs">{c.memberId}</Heading>
+        <Heading size="xs">{c.nickName}</Heading>
         <Text fontSize="xs">{c.inserted}</Text>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
