@@ -1,6 +1,7 @@
 import {
   Badge,
   Box,
+  Button,
   Spinner,
   Table,
   Tbody,
@@ -23,11 +24,13 @@ export function BoardList() {
 
   useEffect(() => {
     axios.get("/api/board/list?" + params).then((r) => setBoardList(r.data));
-  }, []);
+  }, [params]);
 
   if (boardList === null) {
     return <Spinner />;
   }
+
+  function handledButtonClick() {}
 
   return (
     <Box>
@@ -76,6 +79,18 @@ export function BoardList() {
               ))}
           </Tbody>
         </Table>
+      </Box>
+      <Box>
+        <Button onClick={() => navigate("/?p=1")}>1</Button>
+        <Button onClick={() => navigate("/?p=2")}>2</Button>
+        <Button onClick={() => navigate("/?p=3")}>3</Button>
+        <Button onClick={() => navigate("/?p=4")}>4</Button>
+        <Button onClick={() => navigate("/?p=5")}>5</Button>
+        <Button onClick={() => navigate("/?p=6")}>6</Button>
+        <Button onClick={() => navigate("/?p=7")}>7</Button>
+        <Button onClick={() => navigate("/?p=8")}>8</Button>
+        <Button onClick={() => navigate("/?p=9")}>9</Button>
+        <Button onClick={() => navigate("/?p=10")}>10</Button>
       </Box>
     </Box>
   );
