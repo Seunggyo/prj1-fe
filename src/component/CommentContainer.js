@@ -90,7 +90,7 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting, setIsSubmitting }) {
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xs">{c.memberNickName}</Heading>
-        <Text fontSize="xs">{c.inserted}</Text>
+        <Text fontSize="xs">{c.ago}</Text>
       </Flex>
       <Flex justifyContent="space-between" alignItems="center">
         <Box flex={1}>
