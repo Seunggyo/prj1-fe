@@ -17,16 +17,30 @@ import {
   ModalHeader,
   ModalOverlay,
   Spinner,
+  Text,
   useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 import { LoginContext } from "../../component/LoginProvider";
 import { CommentContainer } from "../../component/CommentContainer";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-regular-svg-icons";
+
+function LikeContainer({ like, onClick }) {
+  if (like === null) {
+    return <Spinner />;
+  }
+  return (
+    <Button variant="ghost" size="xl" onClick={onClick}>
+      {/*<FontAwesomeIcon icon={faHeart} size="xl" />*/}
+      {like.like && <Text>꽉찬하트</Text>}
+      {like.like || <Text>빈하트</Text>}
+      <Text>{like.countLike}</Text>
+    </Button>
+  );
+}
 
 export function BoardView() {
   const [board, setBoard] = useState(null);
+  const [like, setLike] = useState(null);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
@@ -39,6 +53,10 @@ export function BoardView() {
   useEffect(() => {
     axios.get("/api/board/id/" + id).then((r) => setBoard(r.data));
   }, []);
+  useEffect(() => {
+    axios.get("/api/like/board/" + id).then((r) => setLike(r.data));
+  }, []);
+
   if (board === null) {
     return <Spinner />;
   }
@@ -66,7 +84,7 @@ export function BoardView() {
   function handleLike() {
     axios
       .post("/api/like", { boardId: board.id })
-      .then(() => console.log("good"))
+      .then((r) => setLike(r.data))
       .catch(() => console.log("bad"))
       .finally(() => console.log("done"));
   }
@@ -75,9 +93,7 @@ export function BoardView() {
     <Box>
       <Flex justifyContent="space-between">
         <Heading size="xl">{board.id} 번 글 보기</Heading>
-        <Button variant="ghost" size="xl" onClick={handleLike}>
-          <FontAwesomeIcon icon={faHeart} size="xl" />
-        </Button>
+        <LikeContainer like={like} onClick={handleLike} />
       </Flex>
       <FormControl>
         <FormLabel>제목</FormLabel>
