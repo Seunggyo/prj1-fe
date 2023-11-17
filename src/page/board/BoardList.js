@@ -12,25 +12,60 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { ChatIcon } from "@chakra-ui/icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart } from "@fortawesome/free-solid-svg-icons";
+import {
+  faChevronLeft,
+  faChevronRight,
+  faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+
+function Pagination({ pageInfo }) {
+  const navigate = useNavigate();
+  const pageNumbers = [];
+  for (let i = pageInfo.startPageNumber; i <= pageInfo.endPageNumber; i++) {
+    pageNumbers.push(i);
+  }
+
+  return (
+    <Box>
+      {pageInfo.prevPageNumber && (
+        <Button onClick={() => navigate("/?p=" + pageInfo.prevPageNumber)}>
+          <FontAwesomeIcon icon={faChevronLeft} />
+        </Button>
+      )}
+      {pageNumbers.map((pageNumber) => (
+        <Button key={pageNumber} onClick={() => navigate("/?p=" + pageNumber)}>
+          {pageNumber}
+        </Button>
+      ))}
+      {pageInfo.nextPageNumber && (
+        <Button onClick={() => navigate("/?p=" + pageInfo.nextPageNumber)}>
+          <FontAwesomeIcon icon={faChevronRight} />
+        </Button>
+      )}
+    </Box>
+  );
+}
 
 export function BoardList() {
   const [boardList, setBoardList] = useState(null);
   const [params] = useSearchParams();
   const navigate = useNavigate();
+  const [pageInfo, setPageInfo] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
-    axios.get("/api/board/list?" + params).then((r) => setBoardList(r.data));
-  }, [params]);
+    axios.get("/api/board/list?" + params).then((r) => {
+      setBoardList(r.data.boardList);
+      setPageInfo(r.data.pageInfo);
+    });
+  }, [location]);
 
   if (boardList === null) {
     return <Spinner />;
   }
-
-  function handledButtonClick() {}
 
   return (
     <Box>
@@ -80,18 +115,7 @@ export function BoardList() {
           </Tbody>
         </Table>
       </Box>
-      <Box>
-        <Button onClick={() => navigate("/?p=1")}>1</Button>
-        <Button onClick={() => navigate("/?p=2")}>2</Button>
-        <Button onClick={() => navigate("/?p=3")}>3</Button>
-        <Button onClick={() => navigate("/?p=4")}>4</Button>
-        <Button onClick={() => navigate("/?p=5")}>5</Button>
-        <Button onClick={() => navigate("/?p=6")}>6</Button>
-        <Button onClick={() => navigate("/?p=7")}>7</Button>
-        <Button onClick={() => navigate("/?p=8")}>8</Button>
-        <Button onClick={() => navigate("/?p=9")}>9</Button>
-        <Button onClick={() => navigate("/?p=10")}>10</Button>
-      </Box>
+      <Pagination pageInfo={pageInfo} />
     </Box>
   );
 }
