@@ -20,6 +20,7 @@ import {
   faChevronRight,
   faHeart,
 } from "@fortawesome/free-solid-svg-icons";
+import { SearchComponent } from "../../component/SearchComponent";
 
 function Pagination({ pageInfo }) {
   const navigate = useNavigate();
@@ -125,6 +126,7 @@ export function BoardList() {
           </Tbody>
         </Table>
       </Box>
+      <SearchComponent />
       <Pagination pageInfo={pageInfo} />
     </Box>
   );
