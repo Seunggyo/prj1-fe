@@ -22,6 +22,22 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchComponent } from "../../component/SearchComponent";
 
+function PageButton({ pageNumber, variant, children }) {
+  const [params] = useSearchParams();
+  const navigate = useNavigate();
+
+  function handleClick() {
+    params.set("p", pageNumber);
+    navigate("/?" + params);
+  }
+
+  return (
+    <Button variant={variant} onClick={handleClick}>
+      {children}
+    </Button>
+  );
+}
+
 function Pagination({ pageInfo }) {
   const navigate = useNavigate();
   const pageNumbers = [];
@@ -40,13 +56,13 @@ function Pagination({ pageInfo }) {
         </Button>
       )}
       {pageNumbers.map((pageNumber) => (
-        <Button
+        <PageButton
           key={pageNumber}
-          onClick={() => navigate("/?p=" + pageNumber)}
           variant={pageNumber === pageInfo.currentPage ? "solid" : "ghost"}
+          pageNumber={pageNumber}
         >
           {pageNumber}
-        </Button>
+        </PageButton>
       ))}
       {pageInfo.nextPageNumber && (
         <Button
