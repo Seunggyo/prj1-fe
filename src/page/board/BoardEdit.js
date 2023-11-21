@@ -19,6 +19,7 @@ import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useImmer } from "use-immer";
 import axios from "axios";
+import { ImageComponent } from "../../component/ImageComponent";
 
 export function BoardEdit() {
   const [board, updateBoard] = useImmer(null);
@@ -82,6 +83,7 @@ export function BoardEdit() {
         <FormLabel>제목</FormLabel>
         <Input value={board.title} onChange={handleTitleChange} />
       </FormControl>
+      <ImageComponent board={board} updateBoard={updateBoard} />
       <FormControl>
         <FormLabel>본문</FormLabel>
         <Input value={board.content} onChange={handleContentChange} />
