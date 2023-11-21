@@ -85,6 +85,7 @@ export function NavBar() {
           log out
         </Button>
       )}
+      <Button onClick={() => navigate("/map")}>지도</Button>
     </Flex>
   );
 }

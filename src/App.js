@@ -16,6 +16,7 @@ import { MemberLogin } from "./page/Member/MemberLogin";
 import { MemberView } from "./page/Member/MemberView";
 import { MemberEdit } from "./page/Member/MemberEdit";
 import LoginProvider from "./component/LoginProvider";
+import { MapTest } from "./page/test/MapTest";
 
 const routes = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ const routes = createBrowserRouter(
       <Route path="member" element={<MemberView />} />
       <Route path="member/edit" element={<MemberEdit />} />
       <Route path="login" element={<MemberLogin />} />
+      <Route path="map" element={<MapTest />} />
     </Route>,
   ),
 );
