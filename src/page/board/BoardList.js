@@ -19,6 +19,7 @@ import {
   faChevronLeft,
   faChevronRight,
   faHeart,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 import { SearchComponent } from "../../component/SearchComponent";
 
@@ -125,6 +126,12 @@ export function BoardList() {
                       <Badge>
                         <FontAwesomeIcon icon={faHeart} />
                         {board.countLike}
+                      </Badge>
+                    )}
+                    {board.countFile > 0 && (
+                      <Badge>
+                        <FontAwesomeIcon icon={faImage} />
+                        {board.countFile}
                       </Badge>
                     )}
                   </Td>
