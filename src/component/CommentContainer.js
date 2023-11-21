@@ -25,9 +25,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginContext } from "./LoginProvider";
 import { DeleteIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
 
-function CommentForm({ boardId, isSubmitting, onSubmit }) {
-  const [comment, setComment] = useState("");
-
+function CommentForm({ boardId, isSubmitting, onSubmit, comment, setComment }) {
   function handleSubmit() {
     onSubmit({ boardId, comment });
   }
@@ -180,6 +178,7 @@ function CommentList({
 
 export function CommentContainer({ boardId }) {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [comment, setComment] = useState("");
   // useRef : 컴포넌트에서 임시로 값을 저장하는 용도로 사용
   const commentIdRef = useRef(0);
 
@@ -200,6 +199,7 @@ export function CommentContainer({ boardId }) {
           description: "댓글이 등록 되었습니다.",
           status: "success",
         });
+        setComment("");
       })
       .catch(() => {
         toast({
@@ -263,6 +263,8 @@ export function CommentContainer({ boardId }) {
     <Box>
       {isAuthenticated() && (
         <CommentForm
+          comment={comment}
+          setComment={setComment}
           boardId={boardId}
           isSubmitting={isSubmitting}
           onSubmit={handleSubmit}
