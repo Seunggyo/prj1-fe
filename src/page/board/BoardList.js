@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  Center,
   Heading,
   Spinner,
   Table,
@@ -48,27 +49,29 @@ function Pagination({ pageInfo }) {
   }
 
   return (
-    <Box>
-      {pageInfo.prevPageNumber && (
-        <PageButton pageNumber={pageInfo.prevPageNumber} variant={"ghost"}>
-          <FontAwesomeIcon icon={faChevronLeft} />
-        </PageButton>
-      )}
-      {pageNumbers.map((pageNumber) => (
-        <PageButton
-          key={pageNumber}
-          variant={pageNumber === pageInfo.currentPage ? "solid" : "ghost"}
-          pageNumber={pageNumber}
-        >
-          {pageNumber}
-        </PageButton>
-      ))}
-      {pageInfo.nextPageNumber && (
-        <PageButton pageNumber={pageInfo.nextPageNumber} variant={"ghost"}>
-          <FontAwesomeIcon icon={faChevronRight} />
-        </PageButton>
-      )}
-    </Box>
+    <Center mt={6} mb={20}>
+      <Box>
+        {pageInfo.prevPageNumber && (
+          <PageButton pageNumber={pageInfo.prevPageNumber} variant={"ghost"}>
+            <FontAwesomeIcon icon={faChevronLeft} />
+          </PageButton>
+        )}
+        {pageNumbers.map((pageNumber) => (
+          <PageButton
+            key={pageNumber}
+            variant={pageNumber === pageInfo.currentPage ? "solid" : "ghost"}
+            pageNumber={pageNumber}
+          >
+            {pageNumber}
+          </PageButton>
+        ))}
+        {pageInfo.nextPageNumber && (
+          <PageButton pageNumber={pageInfo.nextPageNumber} variant={"ghost"}>
+            <FontAwesomeIcon icon={faChevronRight} />
+          </PageButton>
+        )}
+      </Box>
+    </Center>
   );
 }
 
