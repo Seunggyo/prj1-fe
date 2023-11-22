@@ -2,6 +2,7 @@ import {
   Badge,
   Box,
   Button,
+  Heading,
   Spinner,
   Table,
   Tbody,
@@ -91,16 +92,16 @@ export function BoardList() {
 
   return (
     <Box>
-      <h1>게시물 목록</h1>
+      <Heading>게시물 목록</Heading>
       <Box>
         <Table>
           <Thead>
             <Tr>
-              <Th>id</Th>
+              <Th w={"100px"}>id</Th>
               <Th>title</Th>
-              <Th>by</Th>
-              <Th>nickname</Th>
-              <Th>at</Th>
+              <Th w={"100px"}>by</Th>
+              <Th w={"150px"}>nickname</Th>
+              <Th w={"150px"}>at</Th>
             </Tr>
           </Thead>
           <Tbody>
