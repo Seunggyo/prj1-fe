@@ -1,9 +1,16 @@
 import {
-  Box,
   Button,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Center,
+  Divider,
+  Flex,
   FormControl,
   FormHelperText,
   FormLabel,
+  Heading,
   Image,
   Input,
   Modal,
@@ -98,51 +105,67 @@ export function BoardEdit() {
   }
 
   return (
-    <Box>
-      <h1>{id} 번 글 수정</h1>
-      <FormControl>
-        <FormLabel>제목</FormLabel>
-        <Input value={board.title} onChange={handleTitleChange} />
-      </FormControl>
-      <FormControl>
-        <FormLabel>본문</FormLabel>
-        <Input value={board.content} onChange={handleContentChange} />
-      </FormControl>
-      {board.files.length > 0 &&
-        board.files.map((file) => (
-          <Box key={file.id} my="5px" border="3px solid black">
-            <FormControl display="flex" alignItems="center">
-              <FormLabel colorScheme="red">
-                <FontAwesomeIcon color="red" icon={faTrashCan} />
-              </FormLabel>
-              <Switch
-                value={file.id}
-                onChange={handleRemoveFileSwitch}
-                colorScheme="red"
-              />
-              <Box>
-                <Image src={file.url} alt={file.name} width="100%" />
-              </Box>
-            </FormControl>
-          </Box>
-        ))}
-      {/*추가할파일 선택*/}
-      <FormControl>
-        <FormLabel>이미지</FormLabel>
-        <Input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={(e) => setUploadFiles(e.target.files)}
-        />
-        <FormHelperText>
-          한 개 파일은 3MB, 총 용량은 10MB 이내로 첨부하세요.
-        </FormHelperText>
-      </FormControl>
-      <Button colorScheme={"blue"} onClick={onOpen}>
-        저장
-      </Button>
-      <Button onClick={() => navigate(-1)}>취소</Button>
+    <Center>
+      <Card w={"lg"}>
+        <CardHeader>
+          <Heading>{id} 번 글 수정</Heading>
+        </CardHeader>
+        <CardBody>
+          <FormControl mb={5}>
+            <FormLabel>제목</FormLabel>
+            <Input value={board.title} onChange={handleTitleChange} />
+          </FormControl>
+          <FormControl mb={5}>
+            <FormLabel>본문</FormLabel>
+            <Input value={board.content} onChange={handleContentChange} />
+          </FormControl>
+          {board.files.length > 0 &&
+            board.files.map((file) => (
+              <Card
+                key={file.id}
+                sx={{ marginTop: "20px", marginBottom: "20px" }}
+              >
+                <CardBody>
+                  <Image src={file.url} alt={file.name} width="100%" />
+                </CardBody>
+                <Divider />
+                <CardFooter>
+                  <FormControl display="flex" alignItems={"center"} gap={2}>
+                    <FormLabel colorScheme="red" m={0} p={0}>
+                      <FontAwesomeIcon color="red" icon={faTrashCan} />
+                    </FormLabel>
+                    <Switch
+                      value={file.id}
+                      onChange={handleRemoveFileSwitch}
+                      colorScheme="red"
+                    />
+                  </FormControl>
+                </CardFooter>
+              </Card>
+            ))}
+          {/*추가할파일 선택*/}
+          <FormControl mb={5}>
+            <FormLabel>이미지</FormLabel>
+            <Input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={(e) => setUploadFiles(e.target.files)}
+            />
+            <FormHelperText>
+              한 개 파일은 3MB, 총 용량은 10MB 이내로 첨부하세요.
+            </FormHelperText>
+          </FormControl>
+        </CardBody>
+        <CardFooter>
+          <Flex gap={2}>
+            <Button colorScheme={"blue"} onClick={onOpen}>
+              저장
+            </Button>
+            <Button onClick={() => navigate(-1)}>취소</Button>
+          </Flex>
+        </CardFooter>
+      </Card>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -160,6 +183,6 @@ export function BoardEdit() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </Box>
+    </Center>
   );
 }

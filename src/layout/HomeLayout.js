@@ -10,6 +10,7 @@ export function HomeLayout() {
         md: 10,
         lg: 40,
       }}
+      mb={80}
     >
       <NavBar />
       <Outlet />

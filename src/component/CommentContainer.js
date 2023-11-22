@@ -3,7 +3,6 @@ import {
   Button,
   Card,
   CardBody,
-  CardHeader,
   Center,
   Flex,
   Heading,
@@ -128,6 +127,7 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting, setIsSubmitting }) {
           <Box>
             {isEditing || (
               <Button
+                variant="ghost"
                 size="xs"
                 colorScheme="green"
                 onClick={() => setIsEditing(true)}
@@ -137,6 +137,7 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting, setIsSubmitting }) {
             )}
             {isEditing && (
               <Button
+                variant="ghost"
                 size="xs"
                 colorScheme="gray"
                 onClick={() => setIsEditing(false)}
@@ -145,6 +146,7 @@ function CommentItem({ c, onDeleteModalOpen, isSubmitting, setIsSubmitting }) {
               </Button>
             )}
             <Button
+              variant="ghost"
               isDisabled={isSubmitting}
               onClick={() => onDeleteModalOpen(c.id)}
               size="xs"
@@ -168,24 +170,23 @@ function CommentList({
   const { hasAccess } = useContext(LoginContext);
 
   return (
-    <Card>
-      <CardHeader>
-        <Heading size="md">댓글 리스트</Heading>
-      </CardHeader>
-      <CardBody>
-        <Stack divider={<StackDivider />} spacing="4">
-          {commentList.map((c) => (
-            <CommentItem
-              key={c.id}
-              c={c}
-              onDeleteModalOpen={onDeleteModalOpen}
-              isSubmitting={isSubmitting}
-              setIsSubmitting={setIsSubmitting}
-            />
-          ))}
-        </Stack>
-      </CardBody>
-    </Card>
+    <Center mt={10}>
+      <Card w={"lg"}>
+        <CardBody>
+          <Stack divider={<StackDivider />} spacing="4">
+            {commentList.map((c) => (
+              <CommentItem
+                key={c.id}
+                c={c}
+                onDeleteModalOpen={onDeleteModalOpen}
+                isSubmitting={isSubmitting}
+                setIsSubmitting={setIsSubmitting}
+              />
+            ))}
+          </Stack>
+        </CardBody>
+      </Card>
+    </Center>
   );
 }
 
