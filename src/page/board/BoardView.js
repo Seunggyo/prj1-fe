@@ -155,9 +155,9 @@ export function BoardView() {
               </Flex>
             )}
           </CardFooter>
-          <CommentContainer boardId={id} />
         </Card>
       </Center>
+      <CommentContainer boardId={id} />
       {/*  삭제 모달*/}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
