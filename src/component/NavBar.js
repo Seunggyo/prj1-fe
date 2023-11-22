@@ -1,4 +1,4 @@
-import { Box, Button, Flex, useToast } from "@chakra-ui/react";
+import { Button, Flex, useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect } from "react";
@@ -44,44 +44,55 @@ export function NavBar() {
 
   return (
     <Flex>
-      {isAuthenticated() && <Box>{login.nickName}님</Box>}
-      <Button onClick={() => navigate("/")}>
-        <FontAwesomeIcon icon={faHouse} />
+      <Button
+        leftIcon={<FontAwesomeIcon icon={faHouse} />}
+        onClick={() => navigate("/")}
+      >
         home
       </Button>
       {isAuthenticated() && (
-        <Button onClick={() => navigate("/write")}>
-          <FontAwesomeIcon icon={faPenToSquare} />
+        <Button
+          leftIcon={<FontAwesomeIcon icon={faPenToSquare} />}
+          onClick={() => navigate("/write")}
+        >
           write
         </Button>
       )}
       {isAuthenticated() || (
-        <Button onClick={() => navigate("/signup")}>
-          <FontAwesomeIcon icon={faUserPlus} />
+        <Button
+          leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
+          onClick={() => navigate("/signup")}
+        >
           signup
         </Button>
       )}
       {isAdmin() && (
-        <Button onClick={() => navigate("/member/list")}>
-          <FontAwesomeIcon icon={faList} />
+        <Button
+          leftIcon={<FontAwesomeIcon icon={faList} />}
+          onClick={() => navigate("/member/list")}
+        >
           member list
         </Button>
       )}
       {isAuthenticated() && (
-        <Button onClick={() => navigate("/member?" + urlParams.toString())}>
-          <FontAwesomeIcon icon={faUser} />
-          my page
-        </Button>
+        <Button
+          leftIcon={<FontAwesomeIcon icon={faUser} />}
+          onClick={() => navigate("/member?" + urlParams.toString())}
+        ></Button>
       )}
       {isAuthenticated() || (
-        <Button onClick={() => navigate("/login")}>
-          <FontAwesomeIcon icon={faRightToBracket} />
-          login
+        <Button
+          leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
+          onClick={() => navigate("/login")}
+        >
+          {login.nickName}님
         </Button>
       )}
       {isAuthenticated() && (
-        <Button onClick={hadleLogout}>
-          <FontAwesomeIcon icon={faRightFromBracket} />
+        <Button
+          leftIcon={<FontAwesomeIcon icon={faRightFromBracket} />}
+          onClick={hadleLogout}
+        >
           log out
         </Button>
       )}
