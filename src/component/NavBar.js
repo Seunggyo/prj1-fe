@@ -1,4 +1,4 @@
-import { Button, Flex, useToast } from "@chakra-ui/react";
+import { Button, Flex, Spacer, useToast } from "@chakra-ui/react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext, useEffect } from "react";
@@ -45,6 +45,9 @@ export function NavBar() {
   return (
     <Flex>
       <Button
+        borderRadius={0}
+        variant="ghost"
+        size="lg"
         leftIcon={<FontAwesomeIcon icon={faHouse} />}
         onClick={() => navigate("/")}
       >
@@ -52,14 +55,21 @@ export function NavBar() {
       </Button>
       {isAuthenticated() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faPenToSquare} />}
           onClick={() => navigate("/write")}
         >
           write
         </Button>
       )}
+      <Spacer />
       {isAuthenticated() || (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faUserPlus} />}
           onClick={() => navigate("/signup")}
         >
@@ -68,6 +78,9 @@ export function NavBar() {
       )}
       {isAdmin() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faList} />}
           onClick={() => navigate("/member/list")}
         >
@@ -76,20 +89,31 @@ export function NavBar() {
       )}
       {isAuthenticated() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faUser} />}
           onClick={() => navigate("/member?" + urlParams.toString())}
-        ></Button>
-      )}
-      {isAuthenticated() || (
-        <Button
-          leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
-          onClick={() => navigate("/login")}
         >
           {login.nickName}님
         </Button>
       )}
+      {isAuthenticated() || (
+        <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
+          leftIcon={<FontAwesomeIcon icon={faRightToBracket} />}
+          onClick={() => navigate("/login")}
+        >
+          login
+        </Button>
+      )}
       {isAuthenticated() && (
         <Button
+          borderRadius={0}
+          variant="ghost"
+          size="lg"
           leftIcon={<FontAwesomeIcon icon={faRightFromBracket} />}
           onClick={hadleLogout}
         >
