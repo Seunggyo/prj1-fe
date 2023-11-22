@@ -4,6 +4,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  Center,
   Flex,
   Heading,
   Modal,
@@ -24,6 +25,8 @@ import axios from "axios";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { LoginContext } from "./LoginProvider";
 import { DeleteIcon, EditIcon, NotAllowedIcon } from "@chakra-ui/icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComments, faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 function CommentForm({ boardId, isSubmitting, onSubmit, comment, setComment }) {
   function handleSubmit() {
@@ -32,10 +35,20 @@ function CommentForm({ boardId, isSubmitting, onSubmit, comment, setComment }) {
 
   return (
     <Box>
-      <Textarea value={comment} onChange={(e) => setComment(e.target.value)} />
-      <Button isDisabled={isSubmitting} onClick={handleSubmit}>
-        쓰기
-      </Button>
+      <Flex>
+        <Textarea
+          placeholder="댓글을 작성해 주세요"
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+        <Center isDisabled={isSubmitting} onClick={handleSubmit}>
+          <Button h={"full"} size={5}>
+            <Heading p={5}>
+              <FontAwesomeIcon icon={faPaperPlane} />
+            </Heading>
+          </Button>
+        </Center>
+      </Flex>
     </Box>
   );
 }
@@ -261,14 +274,25 @@ export function CommentContainer({ boardId }) {
 
   return (
     <Box>
+      <Center mt={10}>
+        <Box w={"lg"}>
+          <Heading>
+            <FontAwesomeIcon icon={faComments} /> COMMENT
+          </Heading>
+        </Box>
+      </Center>
       {isAuthenticated() && (
-        <CommentForm
-          comment={comment}
-          setComment={setComment}
-          boardId={boardId}
-          isSubmitting={isSubmitting}
-          onSubmit={handleSubmit}
-        />
+        <Center mt={10}>
+          <Box w={"lg"}>
+            <CommentForm
+              comment={comment}
+              setComment={setComment}
+              boardId={boardId}
+              isSubmitting={isSubmitting}
+              onSubmit={handleSubmit}
+            />
+          </Box>
+        </Center>
       )}
       <CommentList
         boardId={boardId}
