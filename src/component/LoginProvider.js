@@ -32,7 +32,6 @@ function LoginProvider({ children }) {
   useEffect(() => {
     fetchLogin();
   }, []);
-  console.log(login);
 
   return (
     <LoginContext.Provider
