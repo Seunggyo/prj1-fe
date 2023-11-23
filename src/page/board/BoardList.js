@@ -121,19 +121,19 @@ export function BoardList() {
                   <Td>
                     {board.title}
                     {board.countComment > 0 && (
-                      <Badge>
+                      <Badge ml={2}>
                         <ChatIcon />
                         {board.countComment}
                       </Badge>
                     )}
                     {board.countLike !== 0 && (
-                      <Badge>
+                      <Badge ml={2}>
                         <FontAwesomeIcon icon={faHeart} />
                         {board.countLike}
                       </Badge>
                     )}
                     {board.countFile > 0 && (
-                      <Badge>
+                      <Badge ml={2}>
                         <FontAwesomeIcon icon={faImage} />
                         {board.countFile}
                       </Badge>
